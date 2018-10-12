@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Build a Blog</h1>
+<h1>All Users</h1>
 
 
-{% if blogs|length == 0 %}
-<p>No blogs yet</p>
+{% if users|length == 0 %}
+<p>No users yet</p>
 
 <!--
     % elif blogs|length == 1 %}
@@ -19,16 +19,11 @@
 
 
 {% else %}
-
-    {% for blog in blogs %}
-    <a href='blog?id={{blog.id}}'>
-        <h2>{{blog.title}}</h2>
-    </a>
-    <p>{{blog.body}}</p>
-    <hr />
-
+    <ul>
+    {% for user in users %}
+        <li><a href='user?id={{user.id}}'><p>{{user.username}}</p></a></li>
     {% endfor %}
-
+    </ul>
 {% endif %}
 
 {% endblock %}
