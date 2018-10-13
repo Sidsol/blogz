@@ -6,13 +6,25 @@
     </head>
 <body>
 <nav>
-    <a href="index">Home</a> |
+    <a href="/">Home</a> |
     <a href="blog">All Posts</a> |
     <a href="newpost">New Post</a> |
     <a href="signup">Sign Up</a> |
     <a href="login">Login</a> |
     <a href="logout">logout</a> |
 </nav>
+
+{% with messages = get_flashed_messages(with_categories=True) %}
+<ul>
+    {% for categories, message in messages %}
+    <li class={{category}}>
+        {{message}}
+    </li>
+    {% endfor %}
+</ul>
+{% endwith %}
+
+
     {% block content %}
     {% endblock %}
 
