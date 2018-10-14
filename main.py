@@ -75,6 +75,7 @@ def blog():
         users = User.query.filter_by(username=user_id)
         for user in users:
             user = user.id
+            
             blogs = Blog.query.filter_by(onwer_id=user)
         return render_template('userposts.html', users=users, blogs=blogs)
     else:

@@ -19,18 +19,17 @@
 
 
 {% else %}
-    
+
     {% for blog in blogs %}
-        {% for user in users %}
-            <!--{% if blog.owner_id == user.id %}-->
-                <a href='blog?id={{blog.id}}'>
-                    <h2>{{blog.title}}</h2>
-                </a>
-                <p>{{blog.body}}</p>
-                <p>Written by <a href="blog?user={{users.username}}">{{user.username}}</a></p>
-            <!--{% endif %}-->
-        {% endfor %}
-    {% endfor %}        
+
+            <a href='blog?id={{blog.id}}'>
+                <h2 class='post-title'>{{blog.title}}</h2>
+            </a>
+            <p class='post-body'>{{blog.body}}</p>
+            <p class='post-author'>Written by <a href="blog?user={{blog.user}}">{{blog.user}}</a></p>
+
+    {% endfor %}    
+        
 {% endif %}
 
 {% endblock %}
