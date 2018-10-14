@@ -51,26 +51,34 @@ def require_login():
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
-    user_name = request.args.get('user')
-    if user_name is not None:
-        users = User.query.filter_by(username=user_name)
-        blogs = Blog.query.filter_by(user=users.id)
-        return render_template('singleUser.html', users=users, blogs=blogs)
-    else:    
-        users = User.query.all()
-        return render_template('index.html', users=users)
+
+    users = User.query.all()
+    return render_template('index.html', users=users)
 
 
 @app.route('/blog', methods=['POST', 'GET'])
 def blog():
 
     blog_id = request.args.get('id')
+    user_id = request.args.get('user')
+
+    blogs = Blog.query.all()
+    users = User.query.all()
+
     if blog_id is not None:
         blogs = Blog.query.filter_by(id=blog_id)
-        return render_template('blogpost.html', blogs=blogs)
+        for blog in blogs:
+            username = blog.id
+            users = User.query.filter_by(id=username).first()
+        return render_template('blogpost.html', blogs=blogs, users=users)
+    elif user_id is not None:
+        users = User.query.filter_by(username=user_id)
+        for user in users:
+            user = user.id
+            blogs = Blog.query.filter_by(onwer_id=user)
+        return render_template('userposts.html', users=users, blogs=blogs)
     else:
-        blogs = Blog.query.all()
-        return render_template('blog.html', blogs=blogs)
+        return render_template('blog.html', blogs=blogs, users=users)
 
 
 @app.route('/newpost', methods=['POST', "GET"])
@@ -85,6 +93,7 @@ def newpost():
         blog_title = request.form['title']
         blog_body = request.form['body']
         user = User.query.filter_by(username=session['user']).first()
+        #user = session['user']
 
         if blog_title == '':
             title_error = 'Please fill in the title'

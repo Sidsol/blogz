@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+
+    {% for user in users %}
+        {% if blogs is none %}
+            <p>User has not created any blog posts yet</p>
+
+        {% else %}
+
+            {% for blog in blogs %}
+
+                <h2>{{blog.title}}</h2>
+                <p>{{blog.body}}</p>
+                <p>Written by <a href="blog?user={{user.username}}">{{user.username}}</a></p>
+
+            {% endfor %}
+        {% endif %}
+    {% endfor %}
+
+{% endblock %}
