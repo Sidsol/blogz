@@ -1,10 +1,45 @@
-h1{
-    text-align: center
-}
+
 h2{
     text-emphasis: Bold
 }
 
+nav ul{
+    padding: 0;
+    display: inline-block;
+}
+
+
+nav ul li{
+    list-style: none;
+    display: inline-block;
+    margin-right: 15px;
+}
+
+body{
+    font-family: sans-serif;
+    width: 800px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
 .error{
     color: red
+}
+.post-title {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.post-body {
+    margin: 0;
+    font-size: 17px;
+}
+
+.post-author {
+    font-style: italic;
+    font-size: 12px;
+}
+
+#user-account{
+    float: right;
 }
