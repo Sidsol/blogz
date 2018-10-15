@@ -1,7 +1,7 @@
 from flask import Flask, request, redirect, render_template, session, flash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc
-
+from hashutil import make_pw_hash, check_pw_hash
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
@@ -19,7 +19,7 @@ class Blog(db.Model):
     title = db.Column(db.String(120))
     body = db.Column(db.String(500))
     # Owner_id will relate blog post to the user that created it
-    onwer_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    onwer_id = db.Column(db.String(120), db.ForeignKey('user.username'))
 
     def __init__(self, title, body, user):
         self.title = title
@@ -32,13 +32,13 @@ class Blog(db.Model):
 class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(120))
-    password = db.Column(db.String(30))
+    username = db.Column(db.String(120), unique=True)
+    pw_hash = db.Column(db.String(120))
     blogs = db.relationship('Blog', backref='user')
 
     def __init__(self, username, password):
         self.username = username
-        self.password = password
+        self.pw_hash = make_pw_hash(password)
 
 
 @app.before_request
@@ -48,6 +48,22 @@ def require_login():
     if request.endpoint not in allowed_routes and 'user' not in session:
         return redirect('/login')
 
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        user = User.query.filter_by(username=username).first()
+        if user and check_pw_hash(password, user.pw_hash):
+            session['user'] = username
+            flash("Logged in")
+            return redirect('/newpost')
+        else:
+            flash('User password incorrect, or user does not exits', 'error')
+
+    return render_template('/login.html')
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
@@ -74,7 +90,7 @@ def blog():
     elif user_id is not None:
         users = User.query.filter_by(username=user_id)
         for user in users:
-            user = user.id
+            user = user.username
             
             blogs = Blog.query.filter_by(onwer_id=user)
         return render_template('userposts.html', users=users, blogs=blogs)
@@ -195,25 +211,6 @@ def input_blank(test):
         return True
     else:
         return False
-
-
-@app.route('/login', methods=['POST', 'GET'])
-def login():
-
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-
-        user = User.query.filter_by(username=username).first()
-        if user and user.password == password:
-            session['user'] = username
-            flash("Logged in")
-            return redirect('/newpost')
-        else:
-            flash('User password incorrect, or user does not exits', 'error')
-
-    return render_template('/login.html')
-
 
 @app.route('/logout', methods=['GET'])
 def logout():

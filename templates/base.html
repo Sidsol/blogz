@@ -35,7 +35,7 @@
 {% with messages = get_flashed_messages(with_categories=True) %}
 <ul>
     {% for categories, message in messages %}
-    <li class={{category}}>
+    <li class={{categories}}>
         {{message}}
     </li>
     {% endfor %}
