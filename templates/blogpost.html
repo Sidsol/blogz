@@ -5,7 +5,7 @@
 
         <h2>{{blog.title}}</h2>
         <p>{{blog.body}}</p>
-        <p>Written by <a href="blog?user={{users.username}}">{{users.username}}</a></p>
+        <p class='post-author'>Written by <a href="blog?user={{blog.onwer_id}}">{{blog.onwer_id}}</a></p>
 
     {% endfor %}
 
