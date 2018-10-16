@@ -1,4 +1,3 @@
-
 h2{
     text-emphasis: Bold
 }
@@ -7,7 +6,6 @@ nav ul{
     padding: 0;
     display: inline-block;
 }
-
 
 nav ul li{
     list-style: none;
@@ -25,6 +23,7 @@ body{
 .error{
     color: red
 }
+
 .post-title {
     font-weight: bold;
     font-size: 20px;
